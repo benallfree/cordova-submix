@@ -1,14 +1,12 @@
-# Cordova Submix
+# Cordova + Submix = Love
 
-## Cordova + Submix = Love
-
-Cordova Submix brings painless asset packaging, [BrowserSync](https://github.com/Browsersync/browser-sync) live relaoding, and Hot Module Replacement to Cordova.
+Cordova Submix brings painless asset packaging, live reloading, and Hot Module Replacement to Cordova.
 
 ## Quickstart
 
+In your existing Cordova project:
+
 ```bash
-yarn add -D cordova-submix
-   or
 npm i --save-dev cordova-submix
 ```
 
@@ -86,4 +84,11 @@ You can also look in `./www/index.html` to see what host prefix it's using. You'
 
 ## Thanks
 
-Big ups to [webpack](https://github.com/webpack/webpack), [webpack-dev-server](https://github.com/webpack/webpack-dev-server), [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/), and [Laravel Mix](https://github.com/JeffreyWay/laravel-mix).
+Big ups:
+
+* [webpack](https://github.com/webpack/webpack)
+* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)
+* [BrowserSync](https://github.com/Browsersync/browser-sync)
+* [Laravel Mix](https://github.com/JeffreyWay/laravel-mix)
+* [React Hot Loader](https://github.com/gaearon/react-hot-loader)
