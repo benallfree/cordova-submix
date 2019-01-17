@@ -1,18 +1,23 @@
 import ora from 'ora'
-import util from 'util'
+import { exec } from 'child_process'
 import _ from 'lodash'
-
-const exec = util.promisify(require('child_process').exec)
 
 async function ex(cmd, opts = {}) {
   const { cwd, text } = _.defaults({}, opts)
   const spinner = ora().start(text || cmd)
-  try {
-    const { stdout, stderr } = await exec(cmd, { cwd })
-    spinner.succeed()
-  } catch (e) {
-    spinner.fail(e.getMessage())
-  }
+  return new Promise((resolve, reject) => {
+    exec(cmd, { cwd }, (err, stdout, stderr) => {
+      if (err) {
+        spinner.fail()
+        console.error(`Command : ${cmd}`)
+        console.error(err.message)
+        reject()
+        return
+      }
+      spinner.succeed()
+      resolve()
+    })
+  })
 }
 
 export { ex }

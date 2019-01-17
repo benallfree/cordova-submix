@@ -11,7 +11,7 @@ program
   .alias('n')
   .description('Create a new Submix project')
 
-  .action(async (dir, id, name, platforms) => {
+  .action(async (dir, id, name, platform = 'ios') => {
     const submixRoot = path.dirname(
       await findUp('package.json', { cwd: __dirname }),
     )
@@ -23,12 +23,12 @@ program
         text: 'Creating fresh Cordova project',
       })
       process.chdir(path.resolve(saved, dir))
-      await Promise.all(
-        _.map((platforms || 'ios').split('|'), p =>
-          ex(`cordova platform add ${p}`, { text: `Adding platform: ${p}` }),
-        ),
-      )
-      await ex(`npm i ${deps.join(' ')}`, { text: 'Installing dependencies' })
+      await ex(`cordova platform add ${platform}`, {
+        text: `Adding platform: ${platform}`,
+      })
+      await ex(`npm i ${deps.join(' ')}`, {
+        text: 'Installing npm dependencies',
+      })
       await ex(`rm -rf www`, { text: 'Clearing build directory' })
       await ex(`cp -r ${path.resolve(submixRoot, 'templates/src')} .`, {
         text: 'Installing boilerplate app source',
@@ -37,10 +37,16 @@ program
         `cp -r ${path.resolve(submixRoot, 'templates/webpack.mix.js')} .`,
         { text: 'Installing webpack configuration' },
       )
+      await ex(`cp -r ${path.resolve(submixRoot, 'templates/build.json')} .`, {
+        text: 'Installing platform build configuration',
+      })
       await ex(
         'NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js',
         { text: 'Building initial version' },
       )
+      await ex(`cordova emulate ${platform}`, {
+        text: 'Building and launching simulator',
+      })
     } finally {
       process.chdir(saved)
     }
