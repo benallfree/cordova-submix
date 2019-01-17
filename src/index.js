@@ -5,6 +5,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const webpackConfig = {
+  output: { publicPath: "./", filename: "index.js" },
   module: {
     rules: [
       {
@@ -17,49 +18,16 @@ const webpackConfig = {
         ]
       }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.ejs",
+      filename: "index.html"
+    })
+  ]
 };
 
-console.log(Mix.paths);
-
 if (Mix.isWatching()) {
-  let ip = null;
-  let ifaces = os.networkInterfaces();
-  for (let dev in ifaces) {
-    const iface = ifaces[dev].filter(function(details) {
-      return details.family === "IPv4" && details.internal === false;
-    });
-    if (iface.length > 0) ip = iface[0].address;
-  }
-
-  webpackConfig.devServer = {
-    contentBase: [
-      path.join(Mix.paths.rootPath, "www"),
-      path.join(Mix.paths.rootPath, "platforms/ios/www")
-    ],
-    host: ip,
-    port: 8080,
-    writeToDisk: filePath => {
-      return /\.html$/.test(filePath);
-    }
-  };
-  const devServerHost = `http://${ip}:${webpackConfig.devServer.port}/`;
-  webpackConfig.output = { publicPath: devServerHost };
-  webpackConfig.plugins = [
-    new HtmlWebpackPlugin({
-      template: "./src/index.ejs",
-      filename: "./www/index.html"
-    })
-  ];
-
-  mix.setResourceRoot(devServerHost);
-} else {
-  webpackConfig.plugins = [
-    new HtmlWebpackPlugin({
-      template: "./src/index.ejs",
-      filename: "./index.html"
-    })
-  ];
 }
 
 async function ex(cmd, cwd) {
@@ -74,6 +42,39 @@ async function ex(cmd, cwd) {
   });
 }
 
+function getExternalIp() {
+  let ip = null;
+  let ifaces = os.networkInterfaces();
+  for (let dev in ifaces) {
+    const iface = ifaces[dev].filter(function(details) {
+      return details.family === "IPv4" && details.internal === false;
+    });
+    if (iface.length > 0) ip = iface[0].address;
+  }
+  return ip;
+}
+
+if (Mix.isWatching()) {
+  webpackConfig.devServer = {
+    contentBase: [
+      path.join(Mix.paths.rootPath, "www"),
+      path.join(Mix.paths.rootPath, "platforms/ios/www")
+    ],
+    host: getExternalIp(),
+    port: 8080,
+    writeToDisk: filePath => {
+      return /\.html$/.test(filePath);
+    }
+  };
+
+  const devServerHost = `http://${getExternalIp()}:${
+    webpackConfig.devServer.port
+  }/`;
+  webpackConfig.output.publicPath = devServerHost;
+  mix.setResourceRoot(devServerHost);
+} else {
+  mix.setResourceRoot("./");
+}
 mix.setPublicPath("www");
 mix.webpackConfig(webpackConfig);
 mix.then(() => ex("cordova prepare"));
