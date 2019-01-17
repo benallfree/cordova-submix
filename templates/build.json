@@ -1,0 +1,16 @@
+{
+  "ios": {
+    "debug": {
+      "developmentTeam": "ATU33QTMPM",
+      "buildFlag": [
+        "-UseModernBuildSystem=0"
+      ]
+    },
+    "release": {
+      "developmentTeam": "ATU33QTMPM",
+      "buildFlag": [
+        "-UseModernBuildSystem=0"
+      ]
+    }
+  }
+}
