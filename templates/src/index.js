@@ -1,11 +1,11 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { App } from './App'
+import React from "react";
+import { render } from "react-dom";
+import { Hot } from "./Hot";
 
 document.addEventListener(
-  'deviceready',
+  "deviceready",
   () => {
-    render(<App />, document.getElementById('app'))
+    render(<Hot />, document.getElementById("app"));
   },
-  false,
-)
+  false
+);
