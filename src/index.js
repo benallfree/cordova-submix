@@ -19,16 +19,8 @@ const webpackConfig = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./src/index.ejs",
-      filename: "index.html"
-    })
-  ]
+  plugins: []
 };
-
-if (Mix.isWatching()) {
-}
 
 async function ex(cmd, cwd) {
   return new Promise((resolve, reject) => {
@@ -71,8 +63,20 @@ if (Mix.isWatching()) {
     webpackConfig.devServer.port
   }/`;
   webpackConfig.output.publicPath = devServerHost;
+  webpackConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      template: "./src/index.ejs",
+      filename: "www/index.html"
+    })
+  );
   mix.setResourceRoot(devServerHost);
 } else {
+  webpackConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      template: "./src/index.ejs",
+      filename: "index.html"
+    })
+  );
   mix.setResourceRoot("./");
 }
 mix.setPublicPath("www");
