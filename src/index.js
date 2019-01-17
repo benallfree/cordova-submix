@@ -67,7 +67,7 @@ if (Mix.isUsing("hmr")) {
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
       template: "./src/index.ejs",
-      filename: "index.html"
+      filename: "./www/index.html"
     })
   );
   mix.setResourceRoot(devServerHost);
