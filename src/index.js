@@ -46,7 +46,7 @@ function getExternalIp() {
   return ip;
 }
 
-if (Mix.isWatching()) {
+if (Mix.isUsing("hmr")) {
   webpackConfig.devServer = {
     contentBase: [
       path.join(Mix.paths.rootPath, "www"),
@@ -55,6 +55,7 @@ if (Mix.isWatching()) {
     host: getExternalIp(),
     port: 8080,
     writeToDisk: filePath => {
+      console.log(filePath, /\.html$/.test(filePath));
       return /\.html$/.test(filePath);
     }
   };
@@ -66,7 +67,7 @@ if (Mix.isWatching()) {
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
       template: "./src/index.ejs",
-      filename: "www/index.html"
+      filename: "index.html"
     })
   );
   mix.setResourceRoot(devServerHost);
