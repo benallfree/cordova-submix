@@ -1,6 +1,8 @@
 # Cordova Submix
 
-Cordova Submix brings painless asset packaging, live relaoding, and Hot Module Replacement to Cordova.
+## Cordova + Submix = Love
+
+Cordova Submix brings painless asset packaging, [BrowserSync](https://github.com/Browsersync/browser-sync) live relaoding, and Hot Module Replacement to Cordova.
 
 ## Quickstart
 
@@ -15,7 +17,9 @@ Add helpful commands to `package.json`:
 ```json
   "scripts": {
     "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot
+    --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
 ```
@@ -29,7 +33,7 @@ mv www src
 Build & run!
 
 ```bash
-yarn dev
+npm run dev
 cordova run ios
 ```
 
@@ -37,7 +41,7 @@ cordova run ios
 
 Submix leverages Laravel Mix, which means a lot. HMR, live reloading, ES6 + proposals, classes, decorators, arrow functions, class properties, static properties... you can use it all.
 
-Submix ships with a boilerpalte Cordova+[React](https://github.com/facebook/react/) project. If you use something different, it's easy enough to replace. Checkout [onsen](https://github.com/OnsenUI/OnsenUI) for a Mobile UI framework, and [react-konva](https://github.com/konvajs/react-konva) to create badass WebGL `<canvas>` apps.
+Submix ships with a boilerplate Cordova+[React](https://github.com/facebook/react/) project. If you use something different, it's easy enough to replace. Checkout [onsen](https://github.com/OnsenUI/OnsenUI) for a Mobile UI framework, and [react-konva](https://github.com/konvajs/react-konva) to create badass WebGL `<canvas>` apps.
 
 React and Webpack work exceptionally well together. Most asset types can be embedded (SCSS, CSS, JS, GIF, PNG, JPG, MP3) and used in your applicaiton as follows:
 
@@ -58,6 +62,7 @@ npm i -g npx json cross-env
 cordova platform add ios
 npm i -D cordova-submix
 npx json -I -f package.json -e 'this.scripts.dev="cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"'
+npx json -I -f package.json -e 'this.scripts.watch="cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"'
 npx json -I -f package.json -e 'this.scripts.hot="cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js"'
 npx json -I -f package.json -e 'this.scripts.prod="cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"'
 rm -rf www/*
@@ -67,9 +72,17 @@ npm run hot
 cordova run ios
 ```
 
-## HMR Discussion
+## HMR and Live Reloading Discussion
 
-HMR only works if the machine hosting `yarn hot` is accessible on the LAN/WAN. Submix attempts to find the external IP address of your host machine. To see what it found, simply examine the output in `./www/index.html`. You'll notice that Submix prefixed the JS assets with the dev server address. You must test your app using this special version of `index.html`. Using `yarn watch` also does prefixing, but `yarn dev` and `yarn prod` will produce normal `index.html` copies - the type you ship with.
+HMR [only kind of works](https://codeburst.io/react-hot-loader-considered-harmful-321fe3b6ca74). To really make it work well, you'd need to engineer your app with a global store and use only stateless render functions. The alternative is to use BrowserSync, which will reload your app at every change.
+
+Either way, your host machine (the one serving the file changes) must be accessible on the LAN/WAN. Submix attempts to find the external IP address of your host machine. To see what it found, simply examine the output of `npm run watch` or `npm run hot`:
+
+```
+Listening on http://192.168.1.100:8080/
+```
+
+You can also look in `./www/index.html` to see what host prefix it's using. You'll notice that Submix prefixed the JS assets with the dev server address. You must test your app using this special version of `index.html`. Using `npm run watch` also does prefixing, but `npm run dev` and `npm run prod` will produce normal `index.html` copies - the type you ship with.
 
 ## Thanks
 

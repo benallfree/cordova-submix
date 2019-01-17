@@ -46,31 +46,62 @@ function getExternalIp() {
   return ip;
 }
 
-if (Mix.isUsing("hmr")) {
-  webpackConfig.devServer = {
-    contentBase: [
-      path.join(Mix.paths.rootPath, "www"),
-      path.join(Mix.paths.rootPath, "platforms/ios/www")
-    ],
-    host: getExternalIp(),
-    port: 8080,
-    writeToDisk: filePath => {
-      console.log(filePath, /\.html$/.test(filePath));
-      return /\.html$/.test(filePath);
-    }
-  };
-
-  const devServerHost = `http://${getExternalIp()}:${
-    webpackConfig.devServer.port
-  }/`;
-  webpackConfig.output.publicPath = devServerHost;
-  webpackConfig.plugins.push(
-    new HtmlWebpackPlugin({
-      template: "./src/index.ejs",
-      filename: "./www/index.html"
-    })
-  );
+if (Mix.isWatching()) {
+  const host = getExternalIp();
+  const port = 8080;
+  const devServerHost = `http://${host}:${port}/`;
   mix.setResourceRoot(devServerHost);
+  mix.then(() => console.log(`Listening on ${devServerHost}`));
+
+  if (Mix.isUsing("hmr")) {
+    webpackConfig.devServer = {
+      contentBase: [
+        path.join(Mix.paths.rootPath, "www"),
+        path.join(Mix.paths.rootPath, "platforms/ios/www")
+      ],
+      host,
+      port,
+      writeToDisk: filePath => {
+        console.log(filePath, /\.html$/.test(filePath));
+        return /\.html$/.test(filePath);
+      }
+    };
+    webpackConfig.output.publicPath = devServerHost;
+    webpackConfig.plugins.push(
+      new HtmlWebpackPlugin({
+        template: "./src/index.ejs",
+        filename: "./www/index.html"
+      })
+    );
+  } else {
+    webpackConfig.output.publicPath = devServerHost;
+    webpackConfig.plugins.push(
+      new HtmlWebpackPlugin({
+        template: "./src/index.ejs",
+        filename: "./index.html"
+      })
+    );
+    mix.browserSync({
+      files: ["./www"],
+      server: ["./www", "./platforms/ios/www"],
+      host,
+      port,
+      proxy: null,
+      open: false,
+      socket: {
+        domain: `http://${host}:${port}`
+      },
+      snippetOptions: {
+        // Dsable injection
+        rule: {
+          match: /(<\/body>|<\/pre>)/i,
+          fn: function(snippet, match) {
+            return match;
+          }
+        }
+      }
+    });
+  }
 } else {
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
