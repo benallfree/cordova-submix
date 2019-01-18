@@ -3,10 +3,10 @@ import { exec } from 'child_process'
 import _ from 'lodash'
 
 async function ex(cmd, opts = {}) {
-  const { cwd, text } = _.defaults({}, opts)
+  const { text, ...rest } = _.defaults({}, opts)
   const spinner = ora().start(text || cmd)
   return new Promise((resolve, reject) => {
-    exec(cmd, { cwd }, (err, stdout, stderr) => {
+    exec(cmd, { maxBuffer: 1024 * 1024, ...rest }, (err, stdout, stderr) => {
       if (err) {
         spinner.fail()
         console.error(`Command : ${cmd}`)
