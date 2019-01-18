@@ -1,6 +1,6 @@
 {
   "name": "cordova-submix",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Asset compiling, live reloading, and Hot Module Replacement for Cordova apps",
   "main": "src/index.js",
   "repository": "http://github.com/benallfree/cordova-submix",
