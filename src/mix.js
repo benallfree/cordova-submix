@@ -1,8 +1,8 @@
-let mix = require('laravel-mix')
-const os = require('os')
-const exec = require('child_process').exec
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+import mix from 'laravel-mix'
+import os from 'os'
+import { ex } from './utils'
+import path from 'path'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const webpackConfig = {
   output: { publicPath: './', filename: 'index.js' },
@@ -20,18 +20,6 @@ const webpackConfig = {
     ],
   },
   plugins: [],
-}
-
-async function ex(cmd, cwd) {
-  return new Promise((resolve, reject) => {
-    console.log(`Running ${cmd}`)
-    exec(cmd, { cwd }, function(err, stdout, stderr) {
-      if (err) {
-        reject(err)
-      }
-      resolve(stdout)
-    })
-  })
 }
 
 function getExternalIp() {
@@ -115,4 +103,4 @@ mix.setPublicPath('www')
 mix.webpackConfig(webpackConfig)
 mix.then(() => ex('cordova prepare'))
 
-module.exports = mix
+export default mix

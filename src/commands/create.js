@@ -30,7 +30,7 @@ program
       await ex(`cordova platform add ${platform}`, {
         text: `Adding platform: ${platform}`,
       })
-      await ex(`npm i ${deps.join(' ')}`, {
+      await ex(`npm i ${_.map(deps, d => `"${d}"`).join(' ')}`, {
         text: 'Installing npm dependencies',
       })
 
@@ -52,6 +52,7 @@ program
       await ex(`cp -r ${path.resolve(submixRoot, 'templates/build.json')} .`, {
         text: 'Installing platform build configuration',
       })
+
       await ex('npm run dev', {
         text: 'Building initial version',
       })

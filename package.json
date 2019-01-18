@@ -29,6 +29,7 @@
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
     "sass-loader": "^7.1.0",
+    "shell-quote": "^1.6.1",
     "webpack": "^4.28.4"
   },
   "devDependencies": {

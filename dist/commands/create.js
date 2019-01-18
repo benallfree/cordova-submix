@@ -74,7 +74,9 @@ function () {
 
           case 16:
             _context.next = 18;
-            return (0, _utils.ex)("npm i ".concat(deps.join(' ')), {
+            return (0, _utils.ex)("npm i ".concat(_lodash.default.map(deps, function (d) {
+              return "\"".concat(d, "\"");
+            }).join(' ')), {
               text: 'Installing npm dependencies'
             });
 
