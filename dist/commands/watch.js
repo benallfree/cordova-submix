@@ -21,8 +21,10 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return (0, _utils.ex)('NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js', {
-              text: 'Watching for changes'
+            return (0, _utils.ex)('node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js', {
+              env: {
+                NODE_ENV: 'development'
+              }
             });
 
           case 2:

@@ -21,8 +21,10 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return (0, _utils.ex)('cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js', {
-              text: 'Building production version'
+            return (0, _utils.ex)('node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js', {
+              env: {
+                NODE_ENV: 'production'
+              }
             });
 
           case 2:
