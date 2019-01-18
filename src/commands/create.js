@@ -1,7 +1,7 @@
 import program from 'commander'
 import path from 'path'
 import findUp from 'find-up'
-
+import editJsonFile from 'edit-json-file'
 import _ from 'lodash'
 import { ex } from '../utils'
 
@@ -29,6 +29,14 @@ program
       await ex(`npm i ${deps.join(' ')}`, {
         text: 'Installing npm dependencies',
       })
+
+      const file = editJsonFile(path.resolve(process.cwd(), 'package.json'))
+      file.set('scripts.dev', 'submix dev')
+      file.set('scripts.hot', 'submix hot')
+      file.set('scripts.prod', 'submix prod')
+      file.set('scripts.watch', 'submix watch')
+      file.save()
+
       await ex(`rm -rf www`, { text: 'Clearing build directory' })
       await ex(`cp -r ${path.resolve(submixRoot, 'templates/src')} .`, {
         text: 'Installing boilerplate app source',
@@ -40,12 +48,9 @@ program
       await ex(`cp -r ${path.resolve(submixRoot, 'templates/build.json')} .`, {
         text: 'Installing platform build configuration',
       })
-      await ex(
-        'NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js',
-        {
-          text: 'Building initial version',
-        },
-      )
+      await ex('npm run dev', {
+        text: 'Building initial version',
+      })
       await ex(`cordova emulate ${platform}`, {
         text: 'Building and launching simulator',
       })
