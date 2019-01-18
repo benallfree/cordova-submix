@@ -4,7 +4,11 @@ program
   .command('hot')
   .alias('h')
   .description('Watch with Hot Module Replacement')
-
-  .action((name, id) => {
-    console.log(name, id)
+  .action(async (name, id) => {
+    await ex(
+      'cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js',
+      {
+        text: 'Watching with HMR',
+      },
+    )
   })

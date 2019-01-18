@@ -4,7 +4,11 @@ program
   .command('prod')
   .alias('p')
   .description('Create production build')
-
-  .action((name, id) => {
-    console.log(name, id)
+  .action(async (name, id) => {
+    await ex(
+      'cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js',
+      {
+        text: 'Building production version',
+      },
+    )
   })

@@ -1,6 +1,7 @@
 import program from 'commander'
 import path from 'path'
 import findUp from 'find-up'
+import fs from 'fs'
 import editJsonFile from 'edit-json-file'
 import _ from 'lodash'
 import { ex } from '../utils'
@@ -17,12 +18,15 @@ program
     )
 
     const saved = process.cwd()
+    const dst = path.resolve(saved, dir)
     try {
-      await ex(`rm -rf "./${dir}"`, { text: 'Cleaning target' })
+      if (fs.existsSync(dst)) {
+        throw new Error(`Path ${dst} exists, aborting`)
+      }
       await ex(`cordova create "${dir}" "${id}" "${name}"`, {
         text: 'Creating fresh Cordova project',
       })
-      process.chdir(path.resolve(saved, dir))
+      process.chdir(dst)
       await ex(`cordova platform add ${platform}`, {
         text: `Adding platform: ${platform}`,
       })
@@ -54,6 +58,8 @@ program
       await ex(`cordova emulate ${platform}`, {
         text: 'Building and launching simulator',
       })
+    } catch (e) {
+      console.error(e.message)
     } finally {
       process.chdir(saved)
     }
