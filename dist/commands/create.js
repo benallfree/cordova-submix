@@ -20,7 +20,7 @@ var _lodash = _interopRequireDefault(require("lodash"));
 
 var _utils = require("../utils");
 
-var deps = ['benallfree/cordova-submix'];
+var deps = ['benallfree/cordova-submix#master'];
 
 _commander.default.command('create <dir> <id> <name> [ios|android]').alias('n').description('Create a new Submix project').action(
 /*#__PURE__*/
@@ -32,6 +32,7 @@ function () {
         submixRoot,
         saved,
         dst,
+        file,
         _args = arguments;
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
@@ -50,68 +51,95 @@ function () {
             saved = process.cwd();
             dst = _path.default.resolve(saved, dir);
             _context.prev = 8;
-            // if (fs.existsSync(dst)) {
-            //   throw new Error(`Path ${dst} exists, aborting`)
-            // }
-            // await ex(`cordova create "${dir}" "${id}" "${name}"`, {
-            //   text: 'Creating fresh Cordova project',
-            // })
-            process.chdir(dst); // await ex(`cordova platform add ${platform}`, {
-            //   text: `Adding platform: ${platform}`,
-            // })
-            // await ex(`npm i ${deps.join(' ')}`, {
-            //   text: 'Installing npm dependencies',
-            // })
-            // const file = editJsonFile(path.resolve(dst, 'package.json'))
-            // file.set('scripts.dev', 'submix dev')
-            // file.set('scripts.hot', 'submix hot')
-            // file.set('scripts.prod', 'submix prod')
-            // file.set('scripts.watch', 'submix watch')
-            // file.save()
 
-            _context.next = 12;
-            return (0, _utils.ex)("rm -rf www", {
-              text: 'Clearing build directory'
+            if (!_fs.default.existsSync(dst)) {
+              _context.next = 11;
+              break;
+            }
+
+            throw new Error("Path ".concat(dst, " exists, aborting"));
+
+          case 11:
+            _context.next = 13;
+            return (0, _utils.ex)("cordova create \"".concat(dir, "\" \"").concat(id, "\" \"").concat(name, "\""), {
+              text: 'Creating fresh Cordova project'
             });
 
-          case 12:
-            _context.next = 14;
-            return (0, _utils.ex)("cp -r ".concat(_path.default.resolve(submixRoot, 'templates/src'), " ."), {
-              text: 'Installing boilerplate app source'
-            });
-
-          case 14:
+          case 13:
+            process.chdir(dst);
             _context.next = 16;
-            return (0, _utils.ex)("cp -r ".concat(_path.default.resolve(submixRoot, 'templates/webpack.mix.js'), " ."), {
-              text: 'Installing webpack configuration'
+            return (0, _utils.ex)("cordova platform add ".concat(platform), {
+              text: "Adding platform: ".concat(platform)
             });
 
           case 16:
             _context.next = 18;
+            return (0, _utils.ex)("npm i ".concat(deps.join(' ')), {
+              text: 'Installing npm dependencies'
+            });
+
+          case 18:
+            file = (0, _editJsonFile.default)(_path.default.resolve(dst, 'package.json'));
+            file.set('scripts.dev', 'submix dev');
+            file.set('scripts.hot', 'submix hot');
+            file.set('scripts.prod', 'submix prod');
+            file.set('scripts.watch', 'submix watch');
+            file.save();
+            _context.next = 26;
+            return (0, _utils.ex)("rm -rf www", {
+              text: 'Clearing build directory'
+            });
+
+          case 26:
+            _context.next = 28;
+            return (0, _utils.ex)("cp -r ".concat(_path.default.resolve(submixRoot, 'templates/src'), " ."), {
+              text: 'Installing boilerplate app source'
+            });
+
+          case 28:
+            _context.next = 30;
+            return (0, _utils.ex)("cp -r ".concat(_path.default.resolve(submixRoot, 'templates/webpack.mix.js'), " ."), {
+              text: 'Installing webpack configuration'
+            });
+
+          case 30:
+            _context.next = 32;
             return (0, _utils.ex)("cp -r ".concat(_path.default.resolve(submixRoot, 'templates/build.json'), " ."), {
               text: 'Installing platform build configuration'
             });
 
-          case 18:
-            _context.next = 23;
+          case 32:
+            _context.next = 34;
+            return (0, _utils.ex)('npm run dev', {
+              text: 'Building initial version'
+            });
+
+          case 34:
+            _context.next = 36;
+            return (0, _utils.ex)("cordova emulate ".concat(platform), {
+              text: 'Building and launching simulator'
+            });
+
+          case 36:
+            _context.next = 41;
             break;
 
-          case 20:
-            _context.prev = 20;
+          case 38:
+            _context.prev = 38;
             _context.t2 = _context["catch"](8);
             console.error(_context.t2.message);
 
-          case 23:
-            _context.prev = 23;
+          case 41:
+            _context.prev = 41;
             process.chdir(saved);
-            return _context.finish(23);
+            return _context.finish(41);
 
-          case 26:
+          case 44:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, this, [[8, 20, 23, 26]]);
+    }, _callee, this, [[8, 38, 41, 44]]);
   }));
 
   return function (_x, _x2, _x3) {

@@ -6,7 +6,7 @@ import editJsonFile from 'edit-json-file'
 import _ from 'lodash'
 import { ex } from '../utils'
 
-const deps = ['benallfree/cordova-submix']
+const deps = ['benallfree/cordova-submix#master']
 program
   .command('create <dir> <id> <name> [ios|android]')
   .alias('n')
@@ -20,26 +20,26 @@ program
     const saved = process.cwd()
     const dst = path.resolve(saved, dir)
     try {
-      // if (fs.existsSync(dst)) {
-      //   throw new Error(`Path ${dst} exists, aborting`)
-      // }
-      // await ex(`cordova create "${dir}" "${id}" "${name}"`, {
-      //   text: 'Creating fresh Cordova project',
-      // })
+      if (fs.existsSync(dst)) {
+        throw new Error(`Path ${dst} exists, aborting`)
+      }
+      await ex(`cordova create "${dir}" "${id}" "${name}"`, {
+        text: 'Creating fresh Cordova project',
+      })
       process.chdir(dst)
-      // await ex(`cordova platform add ${platform}`, {
-      //   text: `Adding platform: ${platform}`,
-      // })
-      // await ex(`npm i ${deps.join(' ')}`, {
-      //   text: 'Installing npm dependencies',
-      // })
+      await ex(`cordova platform add ${platform}`, {
+        text: `Adding platform: ${platform}`,
+      })
+      await ex(`npm i ${deps.join(' ')}`, {
+        text: 'Installing npm dependencies',
+      })
 
-      // const file = editJsonFile(path.resolve(dst, 'package.json'))
-      // file.set('scripts.dev', 'submix dev')
-      // file.set('scripts.hot', 'submix hot')
-      // file.set('scripts.prod', 'submix prod')
-      // file.set('scripts.watch', 'submix watch')
-      // file.save()
+      const file = editJsonFile(path.resolve(dst, 'package.json'))
+      file.set('scripts.dev', 'submix dev')
+      file.set('scripts.hot', 'submix hot')
+      file.set('scripts.prod', 'submix prod')
+      file.set('scripts.watch', 'submix watch')
+      file.save()
 
       await ex(`rm -rf www`, { text: 'Clearing build directory' })
       await ex(`cp -r ${path.resolve(submixRoot, 'templates/src')} .`, {
@@ -52,12 +52,12 @@ program
       await ex(`cp -r ${path.resolve(submixRoot, 'templates/build.json')} .`, {
         text: 'Installing platform build configuration',
       })
-      // await ex('npm run dev', {
-      //   text: 'Building initial version',
-      // })
-      // await ex(`cordova emulate ${platform}`, {
-      //   text: 'Building and launching simulator',
-      // })
+      await ex('npm run dev', {
+        text: 'Building initial version',
+      })
+      await ex(`cordova emulate ${platform}`, {
+        text: 'Building and launching simulator',
+      })
     } catch (e) {
       console.error(e.message)
     } finally {
