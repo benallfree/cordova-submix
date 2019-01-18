@@ -2,11 +2,6 @@
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
 var _laravelMix = _interopRequireDefault(require("laravel-mix"));
 
 var _os = _interopRequireDefault(require("os"));
@@ -120,5 +115,4 @@ _laravelMix.default.then(function () {
   return (0, _utils.ex)('cordova prepare');
 });
 
-var _default = _laravelMix.default;
-exports.default = _default;
+module.exports = _laravelMix.default;

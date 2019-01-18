@@ -103,4 +103,4 @@ mix.setPublicPath('www')
 mix.webpackConfig(webpackConfig)
 mix.then(() => ex('cordova prepare'))
 
-export default mix
+module.exports = mix
