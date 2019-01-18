@@ -8,6 +8,8 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _commander = _interopRequireDefault(require("commander"));
 
+var _utils = require("../utils");
+
 _commander.default.command('watch').alias('w').description('Watch with BrowserSync').action(
 /*#__PURE__*/
 function () {
@@ -19,7 +21,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return ex('NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js', {
+            return (0, _utils.ex)('NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js', {
               text: 'Watching for changes'
             });
 

@@ -8,6 +8,8 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _commander = _interopRequireDefault(require("commander"));
 
+var _utils = require("../utils");
+
 _commander.default.command('hot').alias('h').description('Watch with Hot Module Replacement').action(
 /*#__PURE__*/
 function () {
@@ -19,7 +21,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return ex('cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js', {
+            return (0, _utils.ex)('cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js', {
               text: 'Watching with HMR'
             });
 
