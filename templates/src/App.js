@@ -1,6 +1,10 @@
-import React from "react";
-import "./app.scss";
+import React from 'react'
+import './app.scss'
 
-const App = props => <h1>Submix says Hello!</h1>;
+const App = props => (
+  <h1 style={{ textAlign: 'center', top: 100, position: 'relative' }}>
+    Submix says ayo.
+  </h1>
+)
 
-export { App };
+export { App }

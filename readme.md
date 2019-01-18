@@ -1,38 +1,13 @@
 # Cordova + Submix = Love
 
-Cordova Submix brings painless asset packaging, live reloading, and Hot Module Replacement to Cordova.
+Submix is painless build management, asset packaging, live reloading, and hot module replacement for Cordova.
 
 ## Quickstart
 
-In your existing Cordova project:
 
 ```bash
-npm i --save-dev cordova-submix
-```
-
-Add helpful commands to `package.json`:
-
-```json
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot
-    --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-  },
-```
-
-Create a source directory:
-
-```bash
-mv www src
-```
-
-Build & run!
-
-```bash
-npm run dev
-cordova run ios
+npm i -g cordova-submix
+submix create myApp com.submix.MyApp MyApp ios
 ```
 
 ## Batteries Included
@@ -49,26 +24,40 @@ import myPng from "./assets/logo.png";
 const Image = props => <Image src={myPng} />;
 ```
 
-## Freshstart
 
-Here's a Cordova app from scratch all the way from zero to HMR.
+## Migrating existing Cordova projects
+
+Submix works with existing Cordova projects, too. **Warning: back up your source first, this is a destructive operation!**
+
+### Quick Migrate
+
+Navigate to your Cordova project root and run:
 
 ```bash
-cordova create hello com.example.hello HelloWorld
-cd hello
-npm i -g npx json cross-env
-cordova platform add ios
-npm i -D cordova-submix
-npx json -I -f package.json -e 'this.scripts.dev="cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"'
-npx json -I -f package.json -e 'this.scripts.watch="cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"'
-npx json -I -f package.json -e 'this.scripts.hot="cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js"'
-npx json -I -f package.json -e 'this.scripts.prod="cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"'
-rm -rf www/*
-cp -r ./node_modules/cordova-submix/templates/src .
-cp ./node_modules/cordova-submix/templates/webpack.mix.js .
-npm run hot
-cordova run ios
+submix migrate
 ```
+
+### Manual Migrate
+
+If you don't trust the above, or just want to do it yourself, follow these steps:
+
+```bash
+mv www www.bak
+mv src src.bak
+cp -r ./node_modules/cordova-submix/templates/src .
+cp -r ./node_modules/cordova-submix/templates/webpack.mix.js .
+cp -r ./node_modules/cordova-submix/templates/build.json .
+npm i -g npx json cross-env
+npm i -D cordova-submix
+npx json -I -f package.json -e 'this.scripts.dev="submix dev"'
+npx json -I -f package.json -e 'this.scripts.watch="submix watch"'
+npx json -I -f package.json -e 'this.scripts.hot="submix hot"'
+npx json -I -f package.json -e 'this.scripts.prod="submix prod"'
+npm run build
+cordova emulate ios
+```
+
+From here, it's up to you to migrate what was in `./www` to the new `./src` directory. You can safely edit everything in the `./src` directory to suit your needs.
 
 ## HMR and Live Reloading Discussion
 
